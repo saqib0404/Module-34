@@ -4,11 +4,11 @@ const loadBooks = (search, dataLimit) => {
         .then(data => displayBooks(data.data, dataLimit))
 }
 const displayBooks = (phones, dataLimit = 0) => {
-    console.log(phones);
-    if(dataLimit > 0 && phones.length > 10){
+    // console.log(phones);
+    if (dataLimit > 0 && phones.length > 10) {
         phones = phones.slice(0, 10)
         document.getElementById('show-all').classList.remove('d-none');
-    }else{
+    } else {
         document.getElementById('show-all').classList.add('d-none');
     }
 
@@ -22,7 +22,7 @@ const displayBooks = (phones, dataLimit = 0) => {
     const phoneContainer = document.getElementById('phone-container');
     phoneContainer.innerHTML = '';
     phones.forEach(phone => {
-        console.log(phone);
+        // console.log(phone);
         const singlePhone = document.createElement('div');
         singlePhone.classList.add('col');
         singlePhone.innerHTML = `
@@ -34,6 +34,10 @@ const displayBooks = (phones, dataLimit = 0) => {
                 <h5 class="card-title">Name: ${phone.phone_name} </h5>
                 <p class="card-text">Using mobile phones for a long time makes the user get addicted to it.
                     Some consider it a major source of distraction especially for students</p>
+            
+                <button onclick="loadPhoneDetails('${phone.slug}')" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#phoneDetailModal">
+                        Show Details
+                </button>
             </div>
         </div>
         `
@@ -42,7 +46,6 @@ const displayBooks = (phones, dataLimit = 0) => {
 
     // Spinner
     loadingSpinner(false)
-
 }
 
 // Process Searching
@@ -60,17 +63,42 @@ document.getElementById('phone-search-btn').addEventListener('click', function (
 })
 document.getElementById('phone-search').addEventListener('keypress', function (e) {
     // console.log(e.key)
-    if(e.key === 'Enter'){
+    if (e.key === 'Enter') {
         processSearch(10);
     }
 })
-
-
 
 // Show-All-Button
 document.getElementById('show-all-btn').addEventListener('click', function () {
     processSearch();
 })
+
+
+// load Phone Details
+const loadPhoneDetails = (id) => {
+    // console.log(id);
+    fetch(`https://openapi.programming-hero.com/api/phone/${id}`)
+        .then(res => res.json())
+        .then(data => displayPhoneDetails(data.data))
+}
+
+// Display Phone Details
+const displayPhoneDetails = (phone) => {
+    console.log(phone)
+    document.getElementById('phoneDetailModalLabel').innerText = phone.name;
+    document.getElementById('modal-body').innerHTML = `
+    <div class="d-flex justify-content-around">
+        <img class="me-2" src="${phone.image}" alt="">
+        <div class="text-center">
+            <h2>Main Features</h2>
+            <p>${phone.mainFeatures.chipSet}</p>
+            <p>${phone.mainFeatures.displaySize}</p>
+            <p>${phone.mainFeatures.memory}</p>
+        </div>
+    </div>
+    `;
+}
+
 
 // Spinner
 const loadingSpinner = (isLoading) => {
