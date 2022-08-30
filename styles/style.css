@@ -1,0 +1,18 @@
+#loading-spinner{
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.error-msg{
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.img{
+    width: 15rem;
+}
+.img-container{
+    margin: 0.5rem auto;
+}
